@@ -1,0 +1,141 @@
+@Override
+	public boolean solve(){
+		/*if(this.isSolved()){
+			return true;
+		}*/
+		LinkedList<MySudokuModel> sudos = new LinkedList<>();
+		int [] yx = firstYX();
+		int row=yx[0];
+		int col=yx[1];
+		for(int val=1;val<=9;val++){
+			if(this.isLegal(row, col, val)){
+				MySudokuModel sudo = new MySudokuModel(this);
+				sudo.setBoard(row, col, val);
+				if(sudo.solve())
+					sudos.add(sudo);
+			}
+		}
+		for(MySudokuModel ms : sudos){
+			if(ms.isSolved()){
+				//this.blocks=ms.getBlocks();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+-------------------------------------------------
+@Override
+	public boolean solve(){
+		if(this.isSolved()){
+			return true;
+		}
+		int [] yx=firstYX();
+		int col = yx[1];
+		int row = yx[0];
+		int val = 1;
+		while(!this.isSolved()&&val<=9){
+			if(isLegal(row, col, val)){
+				MySudokuModel sud = new MySudokuModel(this);
+				sud.setBoard(row, col, val);
+				boolean res = sud.solve();
+				if(res){
+					this.blocks=sud.getBlocks();
+				}
+				return res;
+			}else{
+				val ++;
+			}
+		}
+		return false;
+	}
+------------------------------------------------------
+@Override
+	public boolean solve(){
+		if(this.isSolved()){
+			return true;
+		}
+		int [] yx=firstYX();
+		int x = yx[1];
+		int y = yx[0];
+		int val = 1;
+		boolean legal = false;
+		while(!legal && val <= 9){
+			legal = isLegal(y,x,val);
+			if(legal){
+				setBoard(y, x, val);
+				if(solve()){
+					
+				}
+			}else{
+				val ++;
+			}
+		}
+		return false;
+	}
+---------------------------------------------
+@Override
+	public boolean solve(){
+		if(this.isSolved()){
+			return true;
+		}
+		int [] yx=firstYX();
+		int x = yx[1];
+		int y = yx[0];
+		for(int i=1;i<=9;i++){
+			MySudokuModel sud = new MySudokuModel(this.blocks);
+			if(sud.isLegal(y,x,i)){
+				sud.setBoard(y, x, i);
+				if(sud.solve()){
+					this.blocks = sud.getBlocks();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+-------------------------------
+@Override
+	public boolean solve() {
+		List <MySudokuModel> sudoku = new LinkedList<MySudokuModel>();
+		MySudokuModel sud = new MySudokuModel(this);
+		sudoku.add(sud);
+		boolean done=false;
+		while(!done){
+			for(int i=0;i<9;i++){
+				
+			}
+		}
+		return false;
+	}
+	
+	public boolean trySolve(MySudokuModel sudoku){
+		if(sudoku.isSolved()){
+			this.blocks = sudoku.getAllBlocks();
+			return true;
+		}else{
+			for(int i=1;i<=9;i++){
+				MySudokuModel sud = new MySudokuModel(sudoku);
+				int row=0;
+				int col=0;
+				boolean done=false;
+				while(row<9&&!done){
+					if(sud.getBoard(row, col)==0){
+						done=true;
+						if(sud.trySetBoard(row, col,i)){
+							return trySolve(sud);
+							
+						}
+					}
+					col++;
+					if(col>=9){
+						row++;
+						col=0;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
